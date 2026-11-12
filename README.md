@@ -9,7 +9,7 @@
 
 A browser-based interactive installation: a fogged bathroom mirror you can write on with your fingertip, clear with your palm, fog with your breath, and photograph. Everything runs locally in the browser — no frames, audio, or photographs are uploaded.
 
-![FOG MIRROR — a fingertip heart drawn through the fog](assets/mirror.png)
+![FOG MIRROR entry screen with camera and microphone permission cards](assets/entry.png)
 
 | Morning Fog | Neon Dreams |
 | --- | --- |
@@ -47,8 +47,6 @@ Latest Lighthouse audit of the local build (Chromium): **Accessibility 100 · Be
 3. Press **Enter the mirror**, or **Explore without camera** to draw with a mouse/touch.
 
 If a permission is denied, the app explains what happened and keeps working with pointer input and manual fog. It never substitutes a fake camera feed.
-
-![FOG MIRROR entry screen](assets/entry.png)
 
 ## What it does
 
