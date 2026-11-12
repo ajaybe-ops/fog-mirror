@@ -401,7 +401,7 @@ export class UIController extends Emitter {
     if (!theme) return;
     this.theme = theme;
     this.dom.themeName.textContent = theme.name;
-    this.dom.themeChip?.setAttribute("aria-label", `Choose atmosphere. Current: ${theme.name}`);
+    this.dom.themeChip?.setAttribute("aria-label", `Atmosphere ${theme.name}. Choose atmosphere.`);
     this.dom.themeSwatch.style.background = `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.75), transparent 35%), ${theme.preview}`;
     this.dom.themeSwatch.style.boxShadow = `0 0 16px ${theme.accent}44, inset 0 0 0 1px rgba(255,255,255,0.18)`;
     for (const option of this.dom.themeList.querySelectorAll(".theme-option")) {
