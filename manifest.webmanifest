@@ -1,0 +1,27 @@
+{
+  "name": "FOG MIRROR — write on your breath",
+  "short_name": "FOG MIRROR",
+  "description": "A private, real-time fogged mirror you can write on with your fingertip, wipe with your palm, fog with your breath, and photograph.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#08090b",
+  "theme_color": "#08090b",
+  "categories": ["art", "entertainment", "photo"],
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

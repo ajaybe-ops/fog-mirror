@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ajaybe-ops.github.io/fog-mirror/sitemap.xml

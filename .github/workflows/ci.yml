@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Lint, parse, and resolve every module
+        run: npm run check
+
+      - name: Smoke-test the static server
+        run: |
+          node tools/serve.mjs 8765 &
+          server=$!
+          trap 'kill $server 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8765/ > /tmp/index.html; then break; fi
+            sleep 0.5
+          done
+          grep -q "FOG MIRROR" /tmp/index.html
+          curl -fsS http://127.0.0.1:8765/src/main.js > /dev/null
+          curl -fsS http://127.0.0.1:8765/styles.css > /dev/null
+          curl -fsS http://127.0.0.1:8765/favicon.svg > /dev/null
+          echo "Static server smoke test passed."

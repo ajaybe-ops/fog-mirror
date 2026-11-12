@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en" data-theme="fog">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#08090b" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="FOG MIRROR — write on your breath. A private, real-time fogged mirror experience powered by computer vision and audio." />
+  <title>FOG MIRROR — write on your breath</title>
+  <link rel="canonical" href="https://ajaybe-ops.github.io/fog-mirror/" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="FOG MIRROR" />
+  <meta property="og:title" content="FOG MIRROR — write on your breath" />
+  <meta property="og:description" content="A private, real-time fogged mirror you can write on with your fingertip, wipe with your palm, fog with your breath, and photograph. Everything stays in your browser." />
+  <meta property="og:url" content="https://ajaybe-ops.github.io/fog-mirror/" />
+  <meta property="og:image" content="https://ajaybe-ops.github.io/fog-mirror/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="FOG MIRROR — a fogged mirror with a fingertip stroke drawn through the condensation" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FOG MIRROR — write on your breath" />
+  <meta name="twitter:description" content="A private, real-time fogged mirror you can write on, wipe, breathe on, and photograph. Runs entirely in your browser." />
+  <meta name="twitter:image" content="https://ajaybe-ops.github.io/fog-mirror/og.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FOG MIRROR",
+      "url": "https://ajaybe-ops.github.io/fog-mirror/",
+      "description": "A private, real-time fogged mirror you can write on with your fingertip, wipe with your palm, fog with your breath, and photograph.",
+      "applicationCategory": "EntertainmentApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript, ES modules, Canvas 2D, and a camera for the full experience.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "Ajay Krishna" },
+      "license": "https://opensource.org/licenses/MIT"
+    }
+  </script>
+
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar" id="topbar">
+      <a class="brand no-draw" href="#" aria-label="Fog Mirror home" id="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M8 21.5c0-3 2.4-5.5 5.5-5.5.5-2.6 2.8-4.5 5.5-4.5 3 0 5.5 2.4 5.5 5.5 0 .2 0 .3-.1.5h.1c2 0 3.5 1.6 3.5 3.5S26.5 24 24.5 24H10a3 3 0 0 1-2-5.2" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+            <path d="M12 16.5c1.1-.9 2.6-1.3 4-1" stroke="currentColor" stroke-width=".8" stroke-linecap="round" opacity=".5"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-title">FOG MIRROR</span>
+          <span class="brand-sub">a breath between worlds</span>
+        </span>
+      </a>
+
+      <button class="theme-chip no-draw" id="theme-chip" aria-haspopup="dialog" aria-controls="theme-panel" aria-label="Choose atmosphere. Current: Morning Fog">
+        <span class="theme-swatch" id="theme-swatch" aria-hidden="true"></span>
+        <span class="theme-chip-copy">
+          <span class="theme-chip-label">ATMOSPHERE</span>
+          <span class="theme-chip-name" id="theme-name">Morning Fog</span>
+        </span>
+        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <nav class="top-actions no-draw" aria-label="Primary">
+        <button class="icon-btn" id="btn-gallery" aria-label="Open photo gallery" title="Gallery (G)">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="14" rx="3" stroke="currentColor" stroke-width="1.35"/><circle cx="9" cy="10" r="1.6" stroke="currentColor" stroke-width="1.2"/><path d="m5.5 17 4.2-4.2a2 2 0 0 1 2.8 0l1.5 1.5 1.2-1.2a2 2 0 0 1 2.8 0l2 2" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+          <span class="badge" id="gallery-badge" hidden>0</span>
+        </button>
+        <button class="icon-btn" id="btn-sound" aria-label="Toggle ambient sound" aria-pressed="false" title="Ambient sound (M)">
+          <svg class="sound-on" viewBox="0 0 24 24" fill="none"><path d="M5 10v4h3l4 3.5v-11L8 10H5Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/><path d="M15 9.5a4 4 0 0 1 0 5M17.5 7a7.5 7.5 0 0 1 0 10" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+          <svg class="sound-off" viewBox="0 0 24 24" fill="none"><path d="M5 10v4h3l4 3.5v-11L8 10H5Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/><path d="m16 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-settings" aria-label="Open settings" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.35"/><path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2-1.5-2-3.5-2.4 1a8 8 0 0 0-2.6-1.5L14 2h-4l-.4 3a8 8 0 0 0-2.6 1.5l-2.4-1-2 3.5 2 1.5a7.9 7.9 0 0 0 0 3l-2 1.5 2 3.5 2.4-1a8 8 0 0 0 2.6 1.5l.4 3h4l.4-3a8 8 0 0 0 2.6-1.5l2.4 1 2-3.5-2-1.5Z" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-help" aria-label="Open gesture tutorial" title="Gesture tutorial (?)">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.3"/><path d="M9.8 9.3a2.3 2.3 0 1 1 3.4 2c-.8.4-1.2.9-1.2 1.7v.3" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/><circle cx="12" cy="16.5" r=".9" fill="currentColor"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-fullscreen" aria-label="Enter fullscreen" title="Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8.5 4H4v4.5M15.5 4H20v4.5M20 15.5V20h-4.5M8.5 20H4v-4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main class="stage" id="stage">
+      <section class="mirror-wrap" id="mirror-wrap" aria-label="Interactive fogged mirror">
+        <div class="mirror-bezel">
+          <div class="mirror" id="mirror">
+            <div class="mirror-fallback" aria-hidden="true"></div>
+            <video id="camera" playsinline muted autoplay aria-label="Your mirrored camera reflection"></video>
+            <canvas id="secret-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="fog-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="theme-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="droplet-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="drawing-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="particle-canvas" class="layer" aria-hidden="true"></canvas>
+            <canvas id="hand-canvas" class="layer" aria-hidden="true"></canvas>
+
+            <div class="mirror-tint" aria-hidden="true"></div>
+            <div class="mirror-sheen" aria-hidden="true"></div>
+            <div class="mirror-vignette" aria-hidden="true"></div>
+            <div class="mirror-scan" aria-hidden="true"></div>
+            <div class="mirror-edge-light" aria-hidden="true"></div>
+
+            <div class="mirror-hud top-hud no-draw">
+              <div class="status-cluster">
+                <button class="status-pill" id="status-camera" data-state="off" aria-label="Camera off. Enable camera.">
+                  <span class="status-dot"></span><span class="status-text">Camera off</span>
+                </button>
+                <button class="status-pill" id="status-mic" data-state="off" aria-label="Mic off. Enable microphone.">
+                  <span class="status-dot"></span><span class="status-text">Mic off</span>
+                  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+                </button>
+                <div class="status-pill ghost-status" id="status-gesture" data-state="idle" aria-live="polite">
+                  <span class="gesture-orb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9.5 12V6.2a1.4 1.4 0 0 1 2.8 0v4.3-6.2a1.4 1.4 0 0 1 2.8 0v6.2-4.2a1.4 1.4 0 0 1 2.8 0v6.8c0 3.6-2.5 6.4-6 6.4-2 0-3.5-.8-4.6-2.4l-2.2-3.2a1.5 1.5 0 0 1 2.4-1.8l2 2.1" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span class="status-text" id="gesture-label">No hands</span>
+                </div>
+              </div>
+              <div class="hud-actions">
+                <button class="hud-btn" id="btn-hands" aria-label="Toggle hand tracking overlay" aria-pressed="false" title="Hand overlay (H)">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M8 12V7.5a1.2 1.2 0 0 1 2.4 0V11m0-4.5V6a1.2 1.2 0 0 1 2.4 0v5m0-3.5a1.2 1.2 0 0 1 2.4 0v5.2c0 3.4-2.2 5.8-5.4 5.8-1.8 0-3.1-.7-4.1-2.1l-1.8-2.7a1.3 1.3 0 0 1 2.1-1.6L8 11.8" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="hud-btn" id="btn-freeze" aria-label="Freeze fog" aria-pressed="false" title="Freeze fog (F)">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/><path d="m9.4 4.6 2.6 2.2 2.6-2.2M9.4 19.4l2.6-2.2 2.6 2.2M4.9 10.5l3.2-1 .2-3.3M19.1 13.5l-3.2 1-.2 3.3M4.9 13.5l3.2 1 .2 3.3M19.1 10.5l-3.2-1-.2-3.3" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="hud-btn" id="btn-fog-quick" aria-label="Add a breath of fog" title="Add fog">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 16.5c0-2.2 1.8-4 4-4 .4-1.9 2.1-3.3 4.1-3.3 2.3 0 4.2 1.9 4.2 4.2 0 .1 0 .2-.1.4 1.4.1 2.5 1.3 2.5 2.7 0 1.5-1.2 2.7-2.7 2.7H8.2a3.2 3.2 0 0 1-1.7-5.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="breath-widget no-draw" id="breath-widget">
+              <canvas id="breath-canvas" width="180" height="56" aria-hidden="true"></canvas>
+              <div class="breath-meta">
+                <span class="breath-label" id="breath-label">BREATH</span>
+                <span class="breath-state" id="breath-state">listening</span>
+              </div>
+            </div>
+
+            <div class="mode-banner no-draw" id="photo-banner" hidden>
+              <span class="mode-dot"></span>
+              <span><strong>SELFIE MODE</strong><em>peace sign toggles · thumbs up captures</em></span>
+              <button class="mode-close" id="btn-photo-close" aria-label="Exit selfie mode">×</button>
+            </div>
+
+            <div class="gesture-callout no-draw" id="gesture-callout" hidden>
+              <span class="callout-icon" id="callout-icon">✳</span>
+              <span class="callout-copy"><strong id="callout-title">Pinch</strong><em id="callout-sub">to write on the fog</em></span>
+            </div>
+
+            <div class="countdown no-draw" id="countdown" hidden aria-live="assertive">
+              <div class="countdown-ring"><span id="countdown-number">3</span></div>
+              <p id="countdown-caption">Look into the glass</p>
+            </div>
+            <div class="flash" id="flash" aria-hidden="true"></div>
+
+            <div class="toast-stack no-draw" id="toast-stack" aria-live="polite"></div>
+
+            <div class="onboarding-hint no-draw" id="onboarding-hint" hidden>
+              <span class="hint-index">01</span>
+              <p id="onboarding-hint-text">Blow softly toward your microphone to fog the glass.</p>
+              <button id="onboarding-hint-next" class="text-btn">Next</button>
+              <button id="onboarding-hint-close" class="icon-close" aria-label="Dismiss hint">×</button>
+            </div>
+
+            <div class="interaction-note" id="interaction-note">
+              <span class="note-line"></span>
+              <span>touch the glass</span>
+              <span class="note-line"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mirror-caption no-draw">
+          <span class="caption-group"><span class="live-dot"></span><span id="session-time">00:00</span><span class="caption-sep">/</span><span id="fps-indicator">— fps</span></span>
+          <span class="caption-privacy"><svg viewBox="0 0 16 16" width="11" height="11" fill="none" aria-hidden="true"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6h-9z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg> camera &amp; audio stay on this device</span>
+        </div>
+      </section>
+    </main>
+
+    <aside class="fog-dial no-draw" id="fog-dial" aria-label="Fog controls">
+      <div class="dial-head">
+        <span class="dial-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5.8 16.2c0-2.3 1.9-4.2 4.2-4.2.4-2 2.2-3.5 4.3-3.5 2.5 0 4.5 2 4.5 4.5v.3c1.4.2 2.4 1.4 2.4 2.8 0 1.6-1.3 2.9-2.9 2.9H7.5a3.4 3.4 0 0 1-1.7-6.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        <span><span class="dial-kicker">GLASS</span><span class="dial-title">Fog density</span></span>
+        <span class="dial-value" id="fog-value">72</span>
+      </div>
+      <input class="range slim" type="range" id="fog-slider" min="0" max="100" value="72" aria-label="Fog density" />
+      <button class="mist-btn" id="btn-mist"><span>+</span> add fog</button>
+    </aside>
+
+    <div class="right-tools no-draw" id="right-tools" aria-label="Quick tools">
+      <button class="round-tool" id="btn-export" title="Export artwork" aria-label="Export current mirror artwork">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+      </button>
+      <button class="round-tool" id="btn-restore" title="Restore last saved drawing" aria-label="Restore last saved drawing">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4.5 8.5V4.5m0 0H8.5m-4 0 3.2 3.2A7 7 0 1 1 5 14" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="round-tool" id="btn-save-drawing" title="Save drawing" aria-label="Save current drawing">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 4.5h11l3 3v12H5v-15Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 4.5v5h7v-5M8.5 19v-5h7v5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="rail-divider"></div>
+      <button class="round-tool" id="btn-mic-quick" title="Enable microphone" aria-label="Enable microphone">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="3.5" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5V21M9 21h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <button class="round-tool" id="btn-camera-quick" title="Enable camera" aria-label="Enable camera">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 8.5h3l1.5-2h7L17 8.5h3v10H4v-10Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+
+    <nav class="dock no-draw" id="dock" aria-label="Studio tools">
+      <div class="dock-group tools" role="group" aria-label="Gesture tool">
+        <button class="dock-tool is-active" data-tool="write" aria-pressed="true" title="Write (W)">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m5 19 1.2-4.3L16.7 4.2a1.7 1.7 0 0 1 2.4 0l.7.7a1.7 1.7 0 0 1 0 2.4L9.3 17.8 5 19Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/><path d="m14.8 6.1 3.1 3.1" stroke="currentColor" stroke-width="1.35"/></svg></span>
+          <span class="tool-label">Write</span><span class="tool-key">W</span>
+        </button>
+        <button class="dock-tool" data-tool="erase" aria-pressed="false" title="Re-fog / erase (E)">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m4.6 14.3 7.7-7.7a2 2 0 0 1 2.8 0l2.9 2.9a2 2 0 0 1 0 2.8l-5.3 5.3H7.5l-2.9-2.9a2 2 0 0 1 0-2.8Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/><path d="m10.2 8.7 5.7 5.7M13 19h6" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg></span>
+          <span class="tool-label">Fog</span><span class="tool-key">E</span>
+        </button>
+        <button class="dock-tool" data-tool="wipe" aria-pressed="false" title="Wipe (B)">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 13.5c1.3-4.2 4.2-7 8.6-8.2l2.6 2.6c-1.2 4.4-4 7.3-8.2 8.6L6 13.5Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/><path d="M4.5 19.5h9" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg></span>
+          <span class="tool-label">Wipe</span><span class="tool-key">B</span>
+        </button>
+      </div>
+
+      <div class="dock-divider"></div>
+
+      <div class="brush-control">
+        <div class="brush-head"><span>FINGER</span><span id="brush-value">26 px</span></div>
+        <input class="range slim brush-range" type="range" id="brush-slider" min="8" max="72" value="26" aria-label="Stroke thickness" />
+      </div>
+
+      <div class="dock-divider"></div>
+
+      <div class="dock-group icon-group">
+        <button class="dock-icon" id="btn-undo" title="Undo (Ctrl+Z)" aria-label="Undo">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 7 4.5 11.5 9 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.8 11.5H14a5.5 5.5 0 0 1 0 11h-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button class="dock-icon" id="btn-redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m15 7 4.5 4.5L15 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.2 11.5H10a5.5 5.5 0 0 0 0 11h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button class="dock-icon" id="btn-clear" title="Clear mirror" aria-label="Clear mirror">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12M9 7V5h6v2M8 7l.8 12h6.4L16 7" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <div class="dock-divider"></div>
+
+      <button class="dock-primary" id="btn-photo" title="Take a photo (P)">
+        <span class="shutter-ring"><span></span></span>
+        <span class="primary-copy"><span>Capture</span><em>photo</em></span>
+      </button>
+      <button class="dock-tool compact" id="btn-strip" title="Take a four-frame photo strip">
+        <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="1.25"/><path d="M5 8h14M5 12h14M5 16h14" stroke="currentColor" stroke-width="1.05" opacity=".55"/><circle cx="9" cy="5.8" r=".8" fill="currentColor"/><circle cx="9" cy="10" r=".8" fill="currentColor"/><circle cx="9" cy="14" r=".8" fill="currentColor"/></svg></span>
+        <span class="tool-label">Strip</span>
+      </button>
+    </nav>
+
+    <!-- Settings -->
+    <section class="panel glass" id="settings-panel" role="dialog" aria-modal="false" aria-labelledby="settings-title" hidden>
+      <div class="panel-head">
+        <div><span class="panel-kicker">STUDIO</span><h2 id="settings-title">Fine tuning</h2></div>
+        <button class="panel-close" data-close-panel aria-label="Close settings">×</button>
+      </div>
+      <div class="panel-scroll">
+        <div class="setting-block">
+          <div class="setting-head"><label for="settings-fog">Fog intensity</label><span id="settings-fog-value">72%</span></div>
+          <input class="range" type="range" id="settings-fog" min="0" max="100" value="72" />
+          <p class="setting-note">The optical density of condensation on the glass.</p>
+        </div>
+        <div class="setting-block">
+          <div class="setting-head"><label for="settings-sensitivity">Breath sensitivity</label><span id="settings-sensitivity-value">58%</span></div>
+          <input class="range" type="range" id="settings-sensitivity" min="0" max="100" value="58" />
+          <p class="setting-note">Higher values hear a softer breath. Calibration adapts to your room.</p>
+        </div>
+        <div class="setting-block">
+          <div class="setting-head"><label for="settings-brush">Stroke thickness</label><span id="settings-brush-value">26 px</span></div>
+          <input class="range" type="range" id="settings-brush" min="8" max="72" value="26" />
+        </div>
+        <div class="setting-block compact-block">
+          <label class="switch-row"><span><strong>Automatic re-fogging</strong><em>The glass slowly returns when left alone.</em></span><input type="checkbox" id="setting-refog" checked /><span class="switch"></span></label>
+          <label class="switch-row"><span><strong>Hand tracking overlay</strong><em>Show skeletal landmarks and fingertips.</em></span><input type="checkbox" id="setting-hands" /><span class="switch"></span></label>
+          <label class="switch-row"><span><strong>Face-aware photography</strong><em>Frame selfies around the nearest face.</em></span><input type="checkbox" id="setting-face" checked /><span class="switch"></span></label>
+          <label class="switch-row"><span><strong>Ambient sound</strong><em>A quiet, generative glass room tone.</em></span><input type="checkbox" id="setting-ambient" /><span class="switch"></span></label>
+          <label class="switch-row"><span><strong>Reduced motion</strong><em>Calmer particles and transitions.</em></span><input type="checkbox" id="setting-motion" /><span class="switch"></span></label>
+        </div>
+        <div class="setting-block">
+          <div class="setting-head"><span>Photo finish</span></div>
+          <div class="filter-row" id="filter-row" role="group" aria-label="Photo filter">
+            <button class="filter-chip is-active" data-filter="natural">Natural</button>
+            <button class="filter-chip" data-filter="noir">Noir</button>
+            <button class="filter-chip" data-filter="vintage">Vintage</button>
+            <button class="filter-chip" data-filter="neon">Neon</button>
+            <button class="filter-chip" data-filter="dream">Dream</button>
+          </div>
+        </div>
+        <div class="privacy-card">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 5 6.5v5.2c0 4.3 2.8 7.4 7 8.8 4.2-1.4 7-4.5 7-8.8V6.5l-7-3Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>Private by design</strong><p>Camera frames, breath analysis and photographs never leave this browser. Nothing is uploaded.</p></div>
+        </div>
+        <button class="danger-btn" id="btn-clear-data">Clear all local photos &amp; drawings</button>
+        <p class="version-note">FOG MIRROR · v1.0 · local-first installation</p>
+      </div>
+    </section>
+
+    <!-- Themes -->
+    <section class="panel glass theme-panel" id="theme-panel" role="dialog" aria-modal="false" aria-labelledby="theme-title" hidden>
+      <div class="panel-head">
+        <div><span class="panel-kicker">ATMOSPHERE</span><h2 id="theme-title">Choose a world</h2></div>
+        <button class="panel-close" data-close-panel aria-label="Close themes">×</button>
+      </div>
+      <div class="panel-scroll">
+        <p class="panel-intro">Swipe left or right in the air to change the atmosphere.</p>
+        <div class="theme-list" id="theme-list"></div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="panel glass gallery-panel" id="gallery-panel" role="dialog" aria-modal="false" aria-labelledby="gallery-title" hidden>
+      <div class="panel-head">
+        <div><span class="panel-kicker">LOCAL ARCHIVE</span><h2 id="gallery-title">Your photographs</h2></div>
+        <button class="panel-close" data-close-panel aria-label="Close gallery">×</button>
+      </div>
+      <div class="panel-scroll">
+        <div class="gallery-meta"><span id="gallery-count">0 photographs</span><button class="text-btn" id="btn-download-all">Download all</button></div>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <div class="gallery-empty" id="gallery-empty">
+          <div class="empty-orbit"><span></span></div>
+          <h3>Nothing captured yet</h3>
+          <p>Pinch a little world into the fog, then press the shutter.</p>
+          <button class="pill-btn" id="btn-gallery-shoot">Open the shutter</button>
+        </div>
+        <div class="gallery-foot"><button class="danger-btn small" id="btn-gallery-clear">Delete all photographs</button></div>
+      </div>
+    </section>
+
+    <!-- Tutorial -->
+    <div class="modal-backdrop" id="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title" hidden>
+      <div class="tutorial-card glass">
+        <button class="panel-close" id="btn-tutorial-close" aria-label="Close tutorial">×</button>
+        <div class="tutorial-progress"><span id="tutorial-progress-bar"></span></div>
+        <div class="tutorial-step" id="tutorial-step">
+          <span class="tutorial-eyebrow" id="tutorial-eyebrow">01 · THE BREATH</span>
+          <div class="tutorial-visual" id="tutorial-visual">
+            <div class="tutorial-breath"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <h2 id="tutorial-title">Fog the glass.</h2>
+          <p id="tutorial-copy">Bring your face close to the microphone and exhale softly. The mirror responds to the texture of your breath, not to noise.</p>
+        </div>
+        <div class="tutorial-foot">
+          <button class="text-btn" id="btn-tutorial-prev" disabled>Back</button>
+          <div class="tutorial-dots" id="tutorial-dots"></div>
+          <button class="pill-btn" id="btn-tutorial-next">Next gesture</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry / permissions -->
+    <div class="entry-screen" id="entry-screen" role="dialog" aria-modal="true" aria-labelledby="entry-title">
+      <div class="entry-wash" aria-hidden="true"></div>
+      <div class="entry-card glass">
+        <div class="entry-topline"><span>INTERACTIVE INSTALLATION</span><span>EST. 2026</span></div>
+        <div class="entry-emblem" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width=".6" opacity=".3"/>
+            <circle cx="32" cy="32" r="21" stroke="currentColor" stroke-width=".6" opacity=".45"/>
+            <path d="M18 37c0-4.4 3.6-8 8-8 .7-3.9 4.1-6.8 8.1-6.8 4.4 0 8 3.6 8 8v.3c2.8.2 5 2.5 5 5.4 0 3-2.5 5.5-5.5 5.5H23a5 5 0 0 1-5-5Z" stroke="currentColor" stroke-width=".9"/>
+            <path d="M24 29c1.8-1.2 4.1-1.7 6.3-1.3" stroke="currentColor" stroke-width=".6" opacity=".5"/>
+          </svg>
+        </div>
+        <span class="entry-eyebrow">A MIRROR THAT REMEMBERS YOUR BREATH</span>
+        <h1 id="entry-title">Write on<br /><em>your breath.</em></h1>
+        <p class="entry-copy">Exhale to fog the glass. Trace your fingers through the condensation. Capture the version of yourself that appears in the clearing.</p>
+
+        <div class="permission-row">
+          <button class="permission-card" id="btn-camera" data-state="idle">
+            <span class="permission-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 8.5h3l1.5-2h7L17 8.5h3v10H4v-10Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.3"/></svg></span>
+            <span class="permission-copy"><strong>Camera</strong><em id="camera-permission-note">required · stays on device</em></span>
+            <span class="permission-state" id="camera-permission-state">Enable</span>
+          </button>
+          <button class="permission-card" id="btn-mic-entry" data-state="idle">
+            <span class="permission-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="3.5" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5V21M9 21h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+            <span class="permission-copy"><strong>Microphone</strong><em id="mic-permission-note">optional · hears your breath</em></span>
+            <span class="permission-state" id="mic-permission-state">Enable</span>
+          </button>
+        </div>
+
+        <div class="entry-actions">
+          <button class="enter-btn" id="btn-enter" disabled><span>Enter the mirror</span><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="skip-btn" id="btn-skip">Explore without camera</button>
+        </div>
+        <p class="entry-privacy"><svg viewBox="0 0 16 16" width="11" height="11" fill="none" aria-hidden="true"><path d="M4.5 7V5.5a3.5 3.5 0 0 1 7 0V7M3.5 7h9v6h-9z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg> All processing is local. No frames or recordings are uploaded.</p>
+        <p class="entry-error" id="entry-error" role="alert" hidden></p>
+      </div>
+    </div>
+
+    <div class="sr-only" id="live-region" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

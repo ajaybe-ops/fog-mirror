@@ -1,0 +1,37 @@
+{
+  "name": "fog-mirror",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A private, real-time fogged mirror you can write on with your fingertip, wipe with your palm, fog with your breath, and photograph. Vanilla ES modules, Canvas 2D, MediaPipe.",
+  "homepage": "https://ajaybe-ops.github.io/fog-mirror/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajaybe-ops/fog-mirror.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ajaybe-ops/fog-mirror/issues"
+  },
+  "license": "MIT",
+  "author": "Ajay Krishna",
+  "keywords": [
+    "canvas",
+    "computer-vision",
+    "creative-coding",
+    "fog",
+    "gesture-recognition",
+    "interactive-installation",
+    "mediapipe",
+    "mirror",
+    "web-audio"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "dev": "node tools/serve.mjs",
+    "check": "node tools/check.mjs",
+    "test": "node tools/check.mjs"
+  }
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#08090b" />
+  <meta name="robots" content="noindex" />
+  <title>Lost in the fog — FOG MIRROR</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      overflow: hidden;
+      background: #08090b;
+      color: #e9f1f1;
+      font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(60% 55% at 30% 20%, rgba(168, 205, 208, 0.18), transparent 70%),
+        radial-gradient(50% 45% at 78% 72%, rgba(108, 143, 146, 0.16), transparent 72%),
+        radial-gradient(40% 40% at 55% 50%, rgba(226, 242, 242, 0.08), transparent 70%);
+      filter: blur(30px);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 100%);
+      padding: clamp(28px, 6vw, 56px);
+      text-align: center;
+      border: 1px solid rgba(200, 223, 224, 0.14);
+      border-radius: 28px;
+      background: linear-gradient(155deg, rgba(24, 29, 31, 0.82), rgba(10, 12, 14, 0.72));
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(18px);
+    }
+    img { width: 56px; height: 56px; }
+    p.eyebrow {
+      margin: 22px 0 10px;
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #8fb0b2;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: clamp(38px, 9vw, 58px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+    }
+    h1 em { color: #cfe4e5; }
+    p.copy {
+      margin: 16px auto 28px;
+      max-width: 36ch;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #a9babb;
+    }
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(207, 228, 229, 0.28);
+      background: rgba(207, 228, 229, 0.1);
+      color: #f2fafa;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+    a.button:hover { background: rgba(207, 228, 229, 0.18); transform: translateY(-1px); }
+    a.button:focus-visible { outline: 2px solid #cfe4e5; outline-offset: 3px; }
+    @keyframes drift {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); }
+      to { transform: translate3d(2%, 1.5%, 0) scale(1.05); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body::before { animation: none; }
+      a.button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="./favicon.svg" alt="" width="56" height="56" />
+    <p class="eyebrow">404 · lost in the fog</p>
+    <h1>This page has <em>evaporated.</em></h1>
+    <p class="copy">The glass is clear here. Whatever you were looking for has faded back into the air — but the mirror is still warm.</p>
+    <a class="button" href="./">Return to the mirror</a>
+  </main>
+</body>
+</html>
